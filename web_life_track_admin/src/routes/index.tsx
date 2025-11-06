@@ -4,7 +4,7 @@ import { DefaultLayout, PrivateLayout } from "@/layouts";
 import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-const Home = lazy(() => import("@/pages/Home/Home"));
+const LoginPage = lazy(() => import("@/pages/Login"));
 
 const withLayout = (
   layout: LayoutValue,
@@ -15,11 +15,14 @@ const withLayout = (
   if (layout === LAYOUT.DEFAULT_LAYOUT)
     wrapped = <DefaultLayout>{wrapped}</DefaultLayout>;
   if (isPrivate) wrapped = <PrivateLayout>{wrapped}</PrivateLayout>;
-  return <Suspense fallback={<div>Loading...</div>}>{wrapped}</Suspense>;
+  return <Suspense fallback={null}>{wrapped}</Suspense>;
 };
 
 const privateRoutes: IRoute[] = [
-  { path: "/", element: withLayout(LAYOUT.DEFAULT_LAYOUT, <Home />, true) },
+  {
+    path: "/login",
+    element: withLayout(LAYOUT.NONE, <LoginPage />, true),
+  },
 ];
 
 const publicRoutes: IRoute[] = [];

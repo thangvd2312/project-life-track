@@ -21,7 +21,7 @@ export default defineConfig([
     },
     rules: {
       "no-console": "off",
-      "no-unused-vars": ["warn"],
+      "no-unused-vars": "off",
       "react-refresh/only-export-components": "off",
     },
   },
