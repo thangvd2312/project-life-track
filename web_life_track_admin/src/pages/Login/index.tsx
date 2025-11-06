@@ -16,9 +16,10 @@ const LoginPage = () => {
   const [isOpenPasswordResetModal, setIsOpenPasswordResetModal] =
     useState(false);
 
-  function handleLogin() {
+  function handleLogin(e: React.FormEvent) {
     // TODO: login
-    navigate("/");
+    e.preventDefault();
+    navigate("/dashboard");
   }
 
   return (

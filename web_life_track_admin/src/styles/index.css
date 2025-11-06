@@ -78,12 +78,21 @@ body {
   --shadow-2xl: 0px 4px 8px -1px oklch(0 0 0 / 0.25);
 
   /* Theme custom */
+  --theme-red-100: #ff3b30;
+  --theme-orange-100: #ff9500;
   --theme-white-100: #f8f9fa;
   --theme-white-200: #f2f2f7;
+  --theme-white-300: #fff5f5;
+  --theme-white-400: #fff9f0;
+  --theme-white-500: #e5e5ea;
+  --theme-white-600: #f0f7ff;
   --theme-black-100: #1c1c1e;
   --theme-gray-100: #8a8a8e;
   --shadow-theme-100: 0 4px 24px rgba(0, 0, 0, 0.06),
     0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-theme-200: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-theme-300: 0 4px 24px rgba(0, 0, 0, 0.15);
+  --shadow-theme-400: 0 4px 12px rgba(0, 122, 255, 0.15);
 }
 
 .dark {
@@ -185,11 +194,20 @@ body {
   --shadow-2xl: var(--shadow-2xl);
 
   /* Theme custom */
+  --color-theme-orange-100: var(--theme-orange-100);
+  --color-theme-red-100: var(--theme-red-100);
   --color-theme-white-100: var(--theme-white-100);
   --color-theme-white-200: var(--theme-white-200);
+  --color-theme-white-300: var(--theme-white-300);
+  --color-theme-white-400: var(--theme-white-400);
+  --color-theme-white-500: var(--theme-white-500);
+  --color-theme-white-600: var(--theme-white-600);
   --color-theme-black-100: var(--theme-black-100);
   --color-theme-gray-100: var(--theme-gray-100);
   --shadow-theme-100: var(--shadow-theme-100);
+  --shadow-theme-200: var(--shadow-theme-200);
+  --shadow-theme-300: var(--shadow-theme-300);
+  --shadow-theme-400: var(--shadow-theme-400);
 }
 
 @layer base {
