@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Activity, useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import Step1 from "@/components/modals/PasswordResetModal/Step1";
 import Step2 from "@/components/modals/PasswordResetModal/Step2";
@@ -38,11 +38,12 @@ export function PasswordResetModal({
               <h2 className="text-2xl text-theme-black-100">비밀번호 재설정</h2>
             </DialogTitle>
           </div>
-          {step === 1 ? (
+          <Activity mode={step === 1 ? "visible" : "hidden"}>
             <Step1 handleSendEmail={handleSendEmail} />
-          ) : (
+          </Activity>
+          <Activity mode={step === 2 ? "visible" : "hidden"}>
             <Step2 handleResetPassword={handleResetPassword} />
-          )}
+          </Activity>
         </div>
       </DialogContent>
     </Dialog>
