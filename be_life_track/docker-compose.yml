@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: db_life_track
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: be_life_track
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_NAME: Life Track
+      APP_ENV: development
+      DEBUG: "true"
+      DATABASE_URL: mysql+asyncmy://app:app@db:3306/app_db
+      JWT_SECRET: supersecretchangeme
+      JWT_ALGORITHM: HS256
+      JWT_EXPIRATION_MINUTES: "60"
+      LOG_LEVEL: INFO
+      PYTHONPATH: /app
+    ports:
+      - "8000:8000"
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+volumes:
+  db_data:

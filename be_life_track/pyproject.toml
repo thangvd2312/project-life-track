@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "fastapi-app"
+version = "0.1.0"
+description = "Production-ready FastAPI boilerplate"
+authors = ["LifeTrack <dev@lifetrack.local>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.0"
+uvicorn = {extras = ["standard"], version = "^0.30.0"}
+sqlalchemy = "^2.0.35"
+
+asyncmy = "^0.2.9"
+pydantic-settings = "^2.3.4"
+python-jose = "^3.3.0"
+passlib = {version = "^1.7.4", extras = ["bcrypt"]}
+loguru = "^0.7.2"
+python-dotenv = "^1.0.1"
+typing-extensions = "^4.12.2"
+email-validator = "^2.1.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.4"
+black = "^24.10.0"
+isort = "^5.13.2"
+pre-commit = "^3.8.0"
+mypy = "^1.11.1"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+select = ["E", "F", "I", "B", "UP", "C4", "N", "Q", "S", "W", "YTT"]
+ignore = ["S101"]
+
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+py_version = "312"
+line_length = 100
