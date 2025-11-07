@@ -12,6 +12,7 @@ const RiskManagementPage = lazy(() => import("@/pages/RiskManagement"));
 const InsightPage = lazy(() => import("@/pages/Insight"));
 const CareCallManagementPage = lazy(() => import("@/pages/CareCallManagement"));
 const SettingPage = lazy(() => import("@/pages/Setting"));
+const CareCardDetailPage = lazy(() => import("@/pages/CareCardDetail"));
 
 const withLayout = (
   layout: LayoutValue,
@@ -53,6 +54,10 @@ const privateRoutes: IRoute[] = [
   {
     path: URL.Setting,
     element: withLayout(LAYOUT.DASHBOARD_LAYOUT, <SettingPage />, true),
+  },
+  {
+    path: URL.CareCardDetail,
+    element: withLayout(LAYOUT.DASHBOARD_LAYOUT, <CareCardDetailPage />, true),
   },
 ];
 
