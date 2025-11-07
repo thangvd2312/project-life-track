@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const LoginPage = lazy(() => import("@/pages/Login"));
 const DashboardPage = lazy(() => import("@/pages/Dashboard"));
+const UserManagementPage = lazy(() => import("@/pages/UserManagement"));
 
 const withLayout = (
   layout: LayoutValue,
@@ -24,6 +25,10 @@ const privateRoutes: IRoute[] = [
   {
     path: URL.Dashboard,
     element: withLayout(LAYOUT.DASHBOARD_LAYOUT, <DashboardPage />, true),
+  },
+  {
+    path: URL.Users,
+    element: withLayout(LAYOUT.DASHBOARD_LAYOUT, <UserManagementPage />, true),
   },
 ];
 
