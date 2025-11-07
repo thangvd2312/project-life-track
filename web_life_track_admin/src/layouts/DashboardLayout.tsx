@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { matchPath, useNavigate } from "react-router-dom";
 import { SIDEBAR_DASHBOARD_MENU_ITEMS } from "@/constants/layout";
 import { cn } from "@/lib/utils";
 import DefaultLogo from "@/assets/svgs/logo.svg";
@@ -13,11 +13,12 @@ const DashboardLayout = (props: IDefaultLayout) => {
 
   function isMenuSideBarActive(path: string) {
     const currentPath = window.location.pathname;
-    if (currentPath.includes(path)) {
-      return true;
+
+    if (path === "/dashboard") {
+      return matchPath({ path, end: true }, currentPath) !== null;
     }
 
-    return false;
+    return matchPath({ path, end: false }, currentPath) !== null;
   }
 
   return (
