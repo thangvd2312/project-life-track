@@ -1,111 +1,16 @@
-/*
- Navicat Premium Dump SQL
-
- Source Server         : db-life-track
- Source Server Type    : MySQL
- Source Server Version : 80044 (8.0.44)
- Source Host           : localhost:3306
- Source Schema         : app_db
-
- Target Server Type    : MySQL
- Target Server Version : 80044 (8.0.44)
- File Encoding         : 65001
-
- Date: 06/11/2025 14:31:35
-*/
-
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for Admins
+-- Table structure for institutions (MERGED)
 -- ----------------------------
-DROP TABLE IF EXISTS `Admins`;
-CREATE TABLE `Admins` (
-  `admin_id` int NOT NULL AUTO_INCREMENT,
-  `institution_id` int NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
-  `role` enum('admin','superadmin') DEFAULT 'admin',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`admin_id`),
-  UNIQUE KEY `email` (`email`),
-  KEY `institution_id` (`institution_id`),
-  CONSTRAINT `Admins_ibfk_1` FOREIGN KEY (`institution_id`) REFERENCES `Institutions` (`institution_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Table structure for Allergies
--- ----------------------------
-DROP TABLE IF EXISTS `Allergies`;
-CREATE TABLE `Allergies` (
-  `allergy_id` int NOT NULL AUTO_INCREMENT,
-  `allergy_name` varchar(255) NOT NULL,
-  PRIMARY KEY (`allergy_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Table structure for BiomarkerLogs
--- ----------------------------
-DROP TABLE IF EXISTS `BiomarkerLogs`;
-CREATE TABLE `BiomarkerLogs` (
-  `log_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `biomarker_type` enum('blood_pressure','blood_sugar','weight','ecg','sleep','meal') NOT NULL,
-  `data` json DEFAULT NULL,
-  `measured_at` timestamp NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`log_id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `BiomarkerLogs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Table structure for Diseases
--- ----------------------------
-DROP TABLE IF EXISTS `Diseases`;
-CREATE TABLE `Diseases` (
-  `disease_id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` text,
-  PRIMARY KEY (`disease_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Table structure for FoodPreferences
--- ----------------------------
-DROP TABLE IF EXISTS `FoodPreferences`;
-CREATE TABLE `FoodPreferences` (
-  `preference_id` int NOT NULL AUTO_INCREMENT,
-  `preference_name` varchar(255) NOT NULL,
-  PRIMARY KEY (`preference_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Table structure for Groups
--- ----------------------------
-DROP TABLE IF EXISTS `Groups`;
-CREATE TABLE `Groups` (
-  `group_id` int NOT NULL AUTO_INCREMENT,
-  `institution_id` int NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` text,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`group_id`),
-  KEY `institution_id` (`institution_id`),
-  CONSTRAINT `Groups_ibfk_1` FOREIGN KEY (`institution_id`) REFERENCES `Institutions` (`institution_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Table structure for Institutions
--- ----------------------------
-DROP TABLE IF EXISTS `Institutions`;
-CREATE TABLE `Institutions` (
+DROP TABLE IF EXISTS `institutions`;
+CREATE TABLE `institutions` (
   `institution_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `address` varchar(255) DEFAULT NULL,
   `phone_number` varchar(50) DEFAULT NULL,
+  `logo_image_url` varchar(255) DEFAULT NULL,
   `partnership_start_date` date DEFAULT NULL,
   `partnership_end_date` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -113,29 +18,84 @@ CREATE TABLE `Institutions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
--- Table structure for LibraryContents
+-- Table structure for users (MERGED)
 -- ----------------------------
-DROP TABLE IF EXISTS `LibraryContents`;
-CREATE TABLE `LibraryContents` (
-  `content_id` int NOT NULL AUTO_INCREMENT,
-  `admin_id` int NOT NULL,
-  `institution_id` int NOT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `description` text,
-  `file_path` varchar(255) DEFAULT NULL,
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `user_id` int NOT NULL AUTO_INCREMENT,
+  `institution_id` int DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `birthdate` date DEFAULT NULL,
+  `gender` varchar(50) DEFAULT NULL,
+  `phone_number` varchar(50) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `kakao_key` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`content_id`),
-  KEY `admin_id` (`admin_id`),
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `email` (`email`),
   KEY `institution_id` (`institution_id`),
-  CONSTRAINT `LibraryContents_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `Admins` (`admin_id`),
-  CONSTRAINT `LibraryContents_ibfk_2` FOREIGN KEY (`institution_id`) REFERENCES `Institutions` (`institution_id`)
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`institution_id`) REFERENCES `institutions` (`institution_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
--- Table structure for MedicationLogs
+-- Table structure for user_health_info
 -- ----------------------------
-DROP TABLE IF EXISTS `MedicationLogs`;
-CREATE TABLE `MedicationLogs` (
+
+DROP TABLE IF EXISTS `user_health_info`;
+CREATE TABLE `user_health_info` (
+  `user_id` int NOT NULL,
+  `disease_id` int NOT NULL,
+  PRIMARY KEY (`user_id`, `disease_id`),
+  KEY `disease_id` (`disease_id`),
+  CONSTRAINT `user_health_info_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `user_health_info_ibfk_2` FOREIGN KEY (`disease_id`) REFERENCES `diseases` (`disease_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `diseases`;
+CREATE TABLE `diseases` (
+  `disease_id` int NOT NULL AUTO_INCREMENT,
+  `disease_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`disease_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for biomarker_logs (MERGED)
+-- ----------------------------
+DROP TABLE IF EXISTS `biomarker_logs`;
+CREATE TABLE `biomarker_logs` (
+  `log_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `data` json DEFAULT NULL,
+  `measured_at` timestamp NOT NULL,
+  PRIMARY KEY (`log_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `biomarker_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for medication_plan
+-- ----------------------------
+DROP TABLE IF EXISTS `medication_plan`;
+CREATE TABLE `medication_plan` (
+  `plan_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `medication_name` varchar(255) DEFAULT NULL,
+  `routine_info` text,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  PRIMARY KEY (`plan_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `medication_plan_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for medication_log
+-- ----------------------------
+DROP TABLE IF EXISTS `medication_log`;
+CREATE TABLE `medication_log` (
   `log_id` int NOT NULL AUTO_INCREMENT,
   `plan_id` int NOT NULL,
   `user_id` int NOT NULL,
@@ -143,140 +103,235 @@ CREATE TABLE `MedicationLogs` (
   PRIMARY KEY (`log_id`),
   KEY `plan_id` (`plan_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `MedicationLogs_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `MedicationPlan` (`plan_id`),
-  CONSTRAINT `MedicationLogs_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`)
+  CONSTRAINT `medication_log_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `medication_plan` (`plan_id`),
+  CONSTRAINT `medication_log_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
--- Table structure for MedicationPlan
+-- Table structure for medication_logs
 -- ----------------------------
-DROP TABLE IF EXISTS `MedicationPlan`;
-CREATE TABLE `MedicationPlan` (
-  `plan_id` int NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `medication_logs`;
+CREATE TABLE `medication_logs` (
+  `log_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `medication_name` varchar(255) DEFAULT NULL,
-  `routine_info` text,
-  `start_date` date DEFAULT NULL,
-  `end_date` date DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`plan_id`),
+  `status` varchar(50) DEFAULT NULL,
+  `logged_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`log_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `MedicationPlan_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`)
+  CONSTRAINT `medication_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
--- Table structure for Reports
+-- Table structure for allergies
 -- ----------------------------
-DROP TABLE IF EXISTS `Reports`;
-CREATE TABLE `Reports` (
+DROP TABLE IF EXISTS `allergies`;
+CREATE TABLE `allergies` (
+  `allergy_id` int NOT NULL AUTO_INCREMENT,
+  `allergy_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`allergy_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for user_allergies
+-- ----------------------------
+DROP TABLE IF EXISTS `user_allergies`;
+CREATE TABLE `user_allergies` (
+  `user_id` int NOT NULL,
+  `allergy_id` int NOT NULL,
+  PRIMARY KEY (`user_id`, `allergy_id`),
+  KEY `allergy_id` (`allergy_id`),
+  CONSTRAINT `user_allergies_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `user_allergies_ibfk_2` FOREIGN KEY (`allergy_id`) REFERENCES `allergies` (`allergy_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for food_preferences
+-- ----------------------------
+DROP TABLE IF EXISTS `food_preferences`;
+CREATE TABLE `food_preferences` (
+  `preference_id` int NOT NULL AUTO_INCREMENT,
+  `preference_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`preference_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for user_food_preferences
+-- ----------------------------
+DROP TABLE IF EXISTS `user_food_preferences`;
+CREATE TABLE `user_food_preferences` (
+  `user_id` int NOT NULL,
+  `preference_id` int NOT NULL,
+  `type` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`user_id`, `preference_id`),
+  KEY `preference_id` (`preference_id`),
+  CONSTRAINT `user_food_preferences_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `user_food_preferences_ibfk_2` FOREIGN KEY (`preference_id`) REFERENCES `food_preferences` (`preference_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for admins
+-- ----------------------------
+DROP TABLE IF EXISTS `admins`;
+CREATE TABLE `admins` (
+  `admin_id` int NOT NULL AUTO_INCREMENT,
+  `institution_id` int NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `role` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`admin_id`),
+  UNIQUE KEY `email` (`email`),
+  KEY `institution_id` (`institution_id`),
+  CONSTRAINT `admins_ibfk_1` FOREIGN KEY (`institution_id`) REFERENCES `institutions` (`institution_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for groups
+-- ----------------------------
+DROP TABLE IF EXISTS `groups`;
+CREATE TABLE `groups` (
+  `group_id` int NOT NULL AUTO_INCREMENT,
+  `institution_id` int NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`group_id`),
+  KEY `institution_id` (`institution_id`),
+  CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`institution_id`) REFERENCES `institutions` (`institution_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for user_groups
+-- ----------------------------
+DROP TABLE IF EXISTS `user_groups`;
+CREATE TABLE `user_groups` (
+  `user_id` int NOT NULL,
+  `group_id` int NOT NULL,
+  PRIMARY KEY (`user_id`, `group_id`),
+  KEY `group_id` (`group_id`),
+  CONSTRAINT `user_groups_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `user_groups_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `groups` (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- ----------------------------
+-- Table structure for care_cards
+-- ----------------------------
+DROP TABLE IF EXISTS `care_cards`;
+CREATE TABLE `care_cards` (
+  `card_id` int NOT NULL AUTO_INCREMENT,
+  `institution_id` int NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `category` varchar(255) DEFAULT NULL,
+  `period` varchar(255) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`card_id`),
+  KEY `institution_id` (`institution_id`),
+  CONSTRAINT `care_cards_ibfk_1` FOREIGN KEY (`institution_id`) REFERENCES `institutions` (`institution_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for user_care_cards
+-- ----------------------------
+DROP TABLE IF EXISTS `user_care_cards`;
+CREATE TABLE `user_care_cards` (
+  `user_id` int NOT NULL,
+  `card_id` int NOT NULL,
+  `assigned_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`, `card_id`),
+  KEY `card_id` (`card_id`),
+  CONSTRAINT `user_care_cards_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `user_care_cards_ibfk_2` FOREIGN KEY (`card_id`) REFERENCES `care_cards` (`card_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for care_logs
+-- ----------------------------
+DROP TABLE IF EXISTS `care_logs`;
+CREATE TABLE `care_logs` (
+  `log_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `admin_id` int NOT NULL,
+  `card_id` int DEFAULT NULL,
+  `action_type` varchar(255) DEFAULT NULL,
+  `content` text,
+  `logged_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`log_id`),
+  KEY `user_id` (`user_id`),
+  KEY `admin_id` (`admin_id`),
+  KEY `card_id` (`card_id`),
+  CONSTRAINT `care_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `care_logs_ibfk_2` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`),
+  CONSTRAINT `care_logs_ibfk_3` FOREIGN KEY (`card_id`) REFERENCES `care_cards` (`card_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for risks
+-- ----------------------------
+DROP TABLE IF EXISTS `risks`;
+CREATE TABLE `risks` (
+  `risk_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `details` json DEFAULT NULL,
+  `detected_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`risk_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `risks_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for reports_user_app
+-- ----------------------------
+DROP TABLE IF EXISTS `reports_user_app`;
+CREATE TABLE `reports_user_app` (
   `report_id` int NOT NULL AUTO_INCREMENT,
-  `scope` enum('user','group','institution') NOT NULL,
-  `target_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `content` text,
+  `downloadable_until` date DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`report_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `reports_user_app_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for reports_monitoring
+-- ----------------------------
+DROP TABLE IF EXISTS `reports_monitoring`;
+CREATE TABLE `reports_monitoring` (
+  `report_id` int NOT NULL AUTO_INCREMENT,
   `institution_id` int NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `topic` varchar(255) DEFAULT NULL,
+  `target` varchar(255) DEFAULT NULL,
   `file_path` varchar(255) DEFAULT NULL,
-  `created_by` int DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`report_id`),
   KEY `institution_id` (`institution_id`),
-  KEY `created_by` (`created_by`),
-  CONSTRAINT `Reports_ibfk_1` FOREIGN KEY (`institution_id`) REFERENCES `Institutions` (`institution_id`),
-  CONSTRAINT `Reports_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `Admins` (`admin_id`)
+  CONSTRAINT `reports_monitoring_ibfk_1` FOREIGN KEY (`institution_id`) REFERENCES `institutions` (`institution_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
--- Table structure for UserAllergies
+-- Table structure for library_contents
 -- ----------------------------
-DROP TABLE IF EXISTS `UserAllergies`;
-CREATE TABLE `UserAllergies` (
-  `user_id` int NOT NULL,
-  `allergy_id` int NOT NULL,
-  PRIMARY KEY (`user_id`,`allergy_id`),
-  KEY `allergy_id` (`allergy_id`),
-  CONSTRAINT `UserAllergies_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`),
-  CONSTRAINT `UserAllergies_ibfk_2` FOREIGN KEY (`allergy_id`) REFERENCES `Allergies` (`allergy_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Table structure for UserCareManagers
--- ----------------------------
-DROP TABLE IF EXISTS `UserCareManagers`;
-CREATE TABLE `UserCareManagers` (
-  `user_id` int NOT NULL,
-  `admin_id` int NOT NULL,
-  `role` enum('doctor','nurse','nutritionist','coach') NOT NULL DEFAULT 'doctor',
-  `assigned_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`user_id`,`admin_id`),
-  KEY `admin_id` (`admin_id`),
-  CONSTRAINT `UserCareManagers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`),
-  CONSTRAINT `UserCareManagers_ibfk_2` FOREIGN KEY (`admin_id`) REFERENCES `Admins` (`admin_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Table structure for UserDiseases
--- ----------------------------
-DROP TABLE IF EXISTS `UserDiseases`;
-CREATE TABLE `UserDiseases` (
-  `user_id` int NOT NULL,
-  `disease_id` int NOT NULL,
-  `diagnosed_at` date DEFAULT NULL,
-  `status` enum('active','recovered') DEFAULT 'active',
-  PRIMARY KEY (`user_id`,`disease_id`),
-  KEY `disease_id` (`disease_id`),
-  CONSTRAINT `UserDiseases_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`),
-  CONSTRAINT `UserDiseases_ibfk_2` FOREIGN KEY (`disease_id`) REFERENCES `Diseases` (`disease_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Table structure for UserFoodPreferences
--- ----------------------------
-DROP TABLE IF EXISTS `UserFoodPreferences`;
-CREATE TABLE `UserFoodPreferences` (
-  `user_id` int NOT NULL,
-  `preference_id` int NOT NULL,
-  `type` enum('like','dislike') DEFAULT NULL,
-  PRIMARY KEY (`user_id`,`preference_id`),
-  KEY `preference_id` (`preference_id`),
-  CONSTRAINT `UserFoodPreferences_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`),
-  CONSTRAINT `UserFoodPreferences_ibfk_2` FOREIGN KEY (`preference_id`) REFERENCES `FoodPreferences` (`preference_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Table structure for UserGroups
--- ----------------------------
-DROP TABLE IF EXISTS `UserGroups`;
-CREATE TABLE `UserGroups` (
-  `user_id` int NOT NULL,
-  `group_id` int NOT NULL,
-  `joined_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` enum('active','inactive') DEFAULT 'active',
-  PRIMARY KEY (`user_id`,`group_id`),
-  KEY `group_id` (`group_id`),
-  CONSTRAINT `UserGroups_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`),
-  CONSTRAINT `UserGroups_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `Groups` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Table structure for Users
--- ----------------------------
-DROP TABLE IF EXISTS `Users`;
-CREATE TABLE `Users` (
-  `user_id` int NOT NULL AUTO_INCREMENT,
-  `institution_id` int DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `name` varchar(100) DEFAULT NULL,
-  `birthdate` date DEFAULT NULL,
-  `gender` enum('male','female','other') DEFAULT NULL,
-  `phone_number` varchar(50) DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `provider` varchar(50) DEFAULT NULL,
+DROP TABLE IF EXISTS `library_contents`;
+CREATE TABLE `library_contents` (
+  `content_id` int NOT NULL AUTO_INCREMENT,
+  `institution_id` int NOT NULL,
+  `uploader_id` int NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `category` varchar(255) DEFAULT NULL,
+  `file_type` varchar(50) DEFAULT NULL,
+  `file_path` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`user_id`),
-  UNIQUE KEY `email` (`email`),
+  PRIMARY KEY (`content_id`),
   KEY `institution_id` (`institution_id`),
-  CONSTRAINT `Users_ibfk_1` FOREIGN KEY (`institution_id`) REFERENCES `Institutions` (`institution_id`)
+  KEY `uploader_id` (`uploader_id`),
+  CONSTRAINT `library_contents_ibfk_1` FOREIGN KEY (`institution_id`) REFERENCES `institutions` (`institution_id`),
+  CONSTRAINT `library_contents_ibfk_2` FOREIGN KEY (`uploader_id`) REFERENCES `admins` (`admin_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
