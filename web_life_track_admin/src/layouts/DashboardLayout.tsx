@@ -2,6 +2,7 @@ import { matchPath, useNavigate } from "react-router-dom";
 import { SIDEBAR_DASHBOARD_MENU_ITEMS } from "@/constants/layout";
 import { cn } from "@/lib/utils";
 import DefaultLogo from "@/assets/svgs/logo.svg";
+import { URL } from "@/constants/url";
 
 interface IDefaultLayout {
   children: React.ReactNode;
@@ -60,7 +61,12 @@ const DashboardLayout = (props: IDefaultLayout) => {
           <div className="flex items-center gap-2 text-sm text-theme-black-100">
             <span>홍길동님</span>
             <span className="text-theme-gray-100">|</span>
-            <button className="hover:opacity-70 transition-opacity text-primary">
+            <button
+              className="hover:opacity-70 transition-opacity text-primary"
+              onClick={() => {
+                navigate(URL.Login);
+              }}
+            >
               로그아웃
             </button>
           </div>
