@@ -1,4 +1,5 @@
 export const URL = {
+  Home: "/",
   Login: "/login",
   Dashboard: "/dashboard",
   Users: "/dashboard/users",
