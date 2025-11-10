@@ -1,23 +1,23 @@
-from __future__ import annotations
+from datetime import date
 
-from datetime import datetime, date
-
-from sqlalchemy import Date, DateTime, ForeignKey, Integer, String, Text, func
+from sqlalchemy import Date, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db.session import Base
 
 
 class MedicationPlan(Base):
-    __tablename__ = "MedicationPlan"
+    __tablename__ = "medication_plan"
 
-    plan_id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("Users.user_id"), nullable=False)
+    plan_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.user_id"), nullable=False)
     medication_name: Mapped[str | None] = mapped_column(String(255))
     routine_info: Mapped[str | None] = mapped_column(Text)
     start_date: Mapped[date | None] = mapped_column(Date)
     end_date: Mapped[date | None] = mapped_column(Date)
-    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.current_timestamp(), nullable=False)
 
-    user: Mapped["User"] = relationship()
-    logs: Mapped[list["MedicationLog"]] = relationship(back_populates="plan", cascade="all, delete-orphan")
+    # Relationships
+    user: Mapped["User"] = relationship(back_populates="medication_plans")
+    medication_logs: Mapped[list["MedicationLog"]] = relationship(
+        back_populates="medication_plan"
+    )
