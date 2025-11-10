@@ -3,7 +3,11 @@ import { LAYOUT, type LayoutValue } from "@/constants/layout";
 import { URL } from "@/constants/url";
 import { DashboardLayout, PrivateLayout } from "@/layouts";
 import { lazy, Suspense } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 
 const LoginPage = lazy(() => import("@/pages/Login"));
 const DashboardPage = lazy(() => import("@/pages/Dashboard"));
@@ -27,6 +31,10 @@ const withLayout = (
 };
 
 const privateRoutes: IRoute[] = [
+  {
+    path: URL.Home,
+    element: <Navigate to={URL.Login} replace />,
+  },
   {
     path: URL.Dashboard,
     element: withLayout(LAYOUT.DASHBOARD_LAYOUT, <DashboardPage />, true),

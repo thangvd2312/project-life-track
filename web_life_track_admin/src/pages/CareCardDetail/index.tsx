@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { UserSelectionModal } from "@/components/modals/UserSelectionModal";
+import { useLocation, useNavigate } from "react-router-dom";
+import { URL } from "@/constants/url";
 
 interface User {
   id: number;
@@ -14,6 +16,9 @@ interface User {
 }
 
 export default function CareCardDetailPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [isEditMode, setIsEditMode] = useState(false);
   const [isUserSelectionOpen, setIsUserSelectionOpen] = useState(false);
 
@@ -66,13 +71,15 @@ export default function CareCardDetailPage() {
   };
 
   const handleBackClick = () => {
-    // Navigate back to Care tab specifically
-    // if (onNavigate) {
-    //   onNavigate("users", { initialTab: "care" });
-    // } else {
-    //   onBack();
-    // }
+    const navigateFrom = location.state?.navigateFrom;
+    if (navigateFrom === URL.Users) {
+      navigate(URL.Users, { state: { initialTab: "care" } });
+    } else {
+      navigate(-1);
+    }
   };
+
+  console.log("location", location.state);
 
   return (
     <div className="p-8">
