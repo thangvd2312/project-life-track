@@ -86,7 +86,7 @@ InputDecoration _inputDecoration({required String hintText}) {
     ),
     filled: true,
     fillColor: const Color(0xFFF6F7FA),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+    contentPadding: const EdgeInsets.all(18),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(16),
       borderSide: BorderSide.none,
