@@ -1,3 +1,4 @@
+import 'package:app_life_track/views/screens/auth/register.dart';
 import 'package:app_life_track/views/screens/onboarding/onboarding_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -69,7 +70,13 @@ class LoginScreen extends StatelessWidget {
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     alignment: Alignment.center,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const RegisterScreen(),
+                      ),
+                    );
+                  },
                   child: Text(
                     'Create new account',
                     style: GoogleFonts.notoSans(
