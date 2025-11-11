@@ -25,6 +25,7 @@ class ThemeColors {
 
   static const Color blue_100 = Color(0xFF71B5FF);
   static const Color blue_200 = Color(0xFFC8E2FF);
+  static const Color blue_300 = Color(0xFFD7E9FD);
 
   static const Color textPrimary = Color(0xFF3E3E3E);
   static const Color textSecondary = Color(0xFF8C8C8C);

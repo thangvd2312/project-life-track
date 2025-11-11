@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:app_life_track/constants/sizes.dart';
-import 'package:app_life_track/views/screens/home/widgets/health_parameters/blood_pressure.dart';
 import 'package:app_life_track/views/screens/home/widgets/health_parameters/glucose.dart';
 import 'package:app_life_track/views/screens/home/widgets/health_parameters/weight.dart';
+import 'package:app_life_track/constants/sizes.dart';
 
 class HealthParameters extends StatelessWidget {
   const HealthParameters({super.key});
@@ -12,7 +11,6 @@ class HealthParameters extends StatelessWidget {
     return Column(
       spacing: ThemeSize.sm,
       children: [
-        BloodPressure(),
         Row(spacing: ThemeSize.sm, children: [Glucose(), Weight()]),
       ],
     );

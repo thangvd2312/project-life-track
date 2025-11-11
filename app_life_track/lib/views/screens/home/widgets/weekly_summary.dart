@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:app_life_track/constants/shadows.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:app_life_track/views/screens/home/nutrient_segment.dart';
 import 'package:app_life_track/views/screens/home/widgets/curved_edge.dart';
@@ -49,14 +50,7 @@ class WeeklySummary extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.transparent,
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x33007AFF), // #007AFF33
-              blurRadius: 9,
-              spreadRadius: 0,
-              offset: Offset(0, 0), // x, y
-            ),
-          ],
+          boxShadow: [ThemeShadow.secondary],
           borderRadius: BorderRadius.circular(15),
         ),
         child: ClipRRect(

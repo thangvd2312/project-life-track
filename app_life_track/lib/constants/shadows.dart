@@ -9,4 +9,11 @@ class ThemeShadow {
     blurRadius: 4,
     spreadRadius: 0,
   );
+
+  static final secondary = BoxShadow(
+    color: Color(0x33007AFF), // #007AFF33
+    blurRadius: 9,
+    spreadRadius: 0,
+    offset: Offset(0, 0), // x, y
+  );
 }

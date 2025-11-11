@@ -1,5 +1,6 @@
 import 'package:app_life_track/views/screens/auth/login.dart';
 import 'package:app_life_track/views/screens/home/home_screen.dart';
+import 'package:app_life_track/views/screens/main/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: baseTheme.colorScheme,
         scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor,
       ),
-      home: const HomeScreen(),
+      home: const MainScreen(),
     );
   }
 }
