@@ -261,7 +261,7 @@ class Glucose extends StatelessWidget {
                     Text(
                       "Before breakfast",
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.w400,
                         color: Colors.grey,
                       ),
@@ -365,7 +365,7 @@ class Weight extends StatelessWidget {
                     Text(
                       "0.8kg vs last week",
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.w400,
                         color: Colors.grey,
                       ),
@@ -919,7 +919,7 @@ class WeeklySummary extends StatelessWidget {
                         MultiSegmentIndicatorWithLegend(
                           segments: data,
                           totalTarget: 100,
-                          size: 60,
+                          size: 40,
                           showLegend: false,
                           centerWidget: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -927,7 +927,7 @@ class WeeklySummary extends StatelessWidget {
                               Text(
                                 '76',
                                 style: TextStyle(
-                                  fontSize: 34,
+                                  fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -1196,7 +1196,7 @@ class MultiSegmentIndicatorWithLegend extends StatelessWidget {
     this.size = 150,
     this.showLegend = true,
     this.centerWidget,
-    this.lineWidth = 10,
+    this.lineWidth = 5,
   }) : super(key: key);
 
   @override
