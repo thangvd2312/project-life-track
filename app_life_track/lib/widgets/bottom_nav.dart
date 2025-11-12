@@ -1,7 +1,10 @@
-import 'package:app_life_track/views/screens/measurements/blood_pressure_entry_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:app_life_track/views/screens/meal/meal_capture_page.dart';
+import 'package:app_life_track/views/screens/measurements/blood_pressure_entry_dialog.dart';
+import 'package:app_life_track/views/screens/measurements/glucose_entry_dialog.dart';
+import 'package:app_life_track/views/screens/measurements/sleep_entry_dialog.dart';
 
-class CustomBottomNav extends StatelessWidget {
+class CustomBottomNav extends StatefulWidget {
   final int currentIndex;
   final void Function(int) onTap;
 
@@ -11,24 +14,36 @@ class CustomBottomNav extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
-  void _showActionSheet(BuildContext context) {
+  @override
+  State<CustomBottomNav> createState() => _CustomBottomNavState();
+}
+
+class _CustomBottomNavState extends State<CustomBottomNav> {
+  NavigatorState? _navigator;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _navigator = Navigator.of(context);
+  }
+
+  void _showActionSheet() {
     showDialog<void>(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.35),
-      builder: (context) {
+      builder: (dialogContext) {
         return Center(
           child: Material(
             color: Colors.transparent,
             child: Container(
               width: 300,
               height: 160,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
+              padding: const EdgeInsets.all(28),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.12),
+                    color: Colors.black.withValues(alpha: 0.12),
                     blurRadius: 24,
                     offset: const Offset(0, 12),
                   ),
@@ -36,9 +51,10 @@ class CustomBottomNav extends StatelessWidget {
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _ActionSheetButton(
-                    backgroundColor: const Color(0xFF0A7BFF),
+                    backgroundColor: const Color(0xFF007AFF),
                     iconBackground: const Color(0x1F0A7BFF),
                     icon: Image.asset(
                       'assets/icons/meal.png',
@@ -46,11 +62,18 @@ class CustomBottomNav extends StatelessWidget {
                       height: 28,
                     ),
                     label: 'Enter a meal',
-                    onTap: () => Navigator.pop(context),
+                    onTap: () async {
+                      Navigator.pop(dialogContext);
+                      await _navigator?.push(
+                        MaterialPageRoute(
+                          builder: (_) => const MealCapturePage(),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 20),
                   _ActionSheetButton(
-                    backgroundColor: const Color(0xFF2ECC71),
+                    backgroundColor: const Color(0xFF34C759),
                     iconBackground: const Color(0x1F2ECC71),
                     icon: Image.asset(
                       'assets/icons/heart.png',
@@ -59,8 +82,8 @@ class CustomBottomNav extends StatelessWidget {
                     ),
                     label: 'Enter new measurements',
                     onTap: () {
-                      Navigator.pop(context);
-                      _showMeasurementModal(context);
+                      Navigator.pop(dialogContext);
+                      _showMeasurementModal();
                     },
                   ),
                 ],
@@ -72,10 +95,11 @@ class CustomBottomNav extends StatelessWidget {
     );
   }
 
-  void _showMeasurementModal(BuildContext context) {
+  void _showMeasurementModal() {
+    if (!mounted) return;
     showDialog<void>(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.35),
+      barrierColor: Colors.black.withValues(alpha: 0.35),
       builder: (dialogContext) {
         return Center(
           child: Material(
@@ -100,12 +124,18 @@ class CustomBottomNav extends StatelessWidget {
                     label: 'Blood Pressure',
                     onTap: () async {
                       Navigator.pop(dialogContext);
-                      await Navigator.of(context).push(
+                      await _navigator?.push(
                         MaterialPageRoute(
                           builder: (_) => const BloodPressureEntryPage(),
                         ),
                       );
-                      if (context.mounted) _showMeasurementModal(context);
+                      if (mounted && _navigator != null) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (mounted) {
+                            _showMeasurementModal();
+                          }
+                        });
+                      }
                     },
                   ),
                   const SizedBox(height: 12),
@@ -117,7 +147,21 @@ class CustomBottomNav extends StatelessWidget {
                       height: 20,
                     ),
                     label: 'Glucose',
-                    onTap: () => Navigator.pop(dialogContext),
+                    onTap: () async {
+                      Navigator.pop(dialogContext);
+                      await _navigator?.push(
+                        MaterialPageRoute(
+                          builder: (_) => const GlucoseEntryPage(),
+                        ),
+                      );
+                      if (mounted && _navigator != null) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (mounted) {
+                            _showMeasurementModal();
+                          }
+                        });
+                      }
+                    },
                   ),
                   const SizedBox(height: 12),
                   _MeasurementOptionButton(
@@ -128,7 +172,21 @@ class CustomBottomNav extends StatelessWidget {
                       height: 20,
                     ),
                     label: 'Sleep',
-                    onTap: () => Navigator.pop(dialogContext),
+                    onTap: () async {
+                      Navigator.pop(dialogContext);
+                      await _navigator?.push(
+                        MaterialPageRoute(
+                          builder: (_) => const SleepEntryPage(),
+                        ),
+                      );
+                      if (mounted && _navigator != null) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (mounted) {
+                            _showMeasurementModal();
+                          }
+                        });
+                      }
+                    },
                   ),
                 ],
               ),
@@ -147,7 +205,7 @@ class CustomBottomNav extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, -3),
           ),
@@ -158,12 +216,12 @@ class CustomBottomNav extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         children: [
           BottomNavigationBar(
-            currentIndex: currentIndex,
+            currentIndex: widget.currentIndex,
             onTap: (index) {
               if (index == 2) {
-                _showActionSheet(context);
+                _showActionSheet();
               } else {
-                onTap(index);
+                widget.onTap(index);
               }
             },
             type: BottomNavigationBarType.fixed,
@@ -196,7 +254,7 @@ class CustomBottomNav extends StatelessWidget {
                   borderRadius: BorderRadius.circular(50),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(50),
-                    onTap: () => _showActionSheet(context),
+                    onTap: () => _showActionSheet(),
                     child: const Icon(Icons.add, size: 32, color: Colors.white),
                   ),
                 ),

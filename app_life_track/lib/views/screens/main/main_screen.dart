@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:app_life_track/views/screens/analysis/analysis_screen.dart';
 import 'package:app_life_track/widgets/bottom_nav.dart';
 import 'package:app_life_track/views/screens/home/home_screen.dart';
+import 'package:app_life_track/views/screens/my_info/my_info_screen.dart';
+import 'package:app_life_track/views/screens/call/call_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -11,14 +13,23 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
-  final List<Widget> _screens = [HomeScreen(), AnalysisScreen()];
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const AnalysisScreen(),
+    const SizedBox(), // Placeholder for add button (handled by modal)
+    const MyInfoScreen(),
+    const CallScreen(),
+  ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    // Index 2 is the add button which shows a modal, not a screen
+    if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override

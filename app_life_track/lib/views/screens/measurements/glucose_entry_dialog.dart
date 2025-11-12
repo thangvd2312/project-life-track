@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class BloodPressureEntryPage extends StatefulWidget {
-  const BloodPressureEntryPage({super.key});
+class GlucoseEntryPage extends StatefulWidget {
+  const GlucoseEntryPage({super.key});
 
   @override
-  State<BloodPressureEntryPage> createState() => _BloodPressureEntryPageState();
+  State<GlucoseEntryPage> createState() => _GlucoseEntryPageState();
 }
 
-class _BloodPressureEntryPageState extends State<BloodPressureEntryPage> {
+class _GlucoseEntryPageState extends State<GlucoseEntryPage> {
   late DateTime _measurementDateTime;
   late final TextEditingController _dateController;
-  late final TextEditingController _systolicController;
-  late final TextEditingController _diastolicController;
+  late final TextEditingController _glucoseController;
 
   @override
   void initState() {
@@ -21,15 +20,13 @@ class _BloodPressureEntryPageState extends State<BloodPressureEntryPage> {
     _dateController = TextEditingController(
       text: _formatDateTime(_measurementDateTime),
     );
-    _systolicController = TextEditingController();
-    _diastolicController = TextEditingController();
+    _glucoseController = TextEditingController();
   }
 
   @override
   void dispose() {
     _dateController.dispose();
-    _systolicController.dispose();
-    _diastolicController.dispose();
+    _glucoseController.dispose();
     super.dispose();
   }
 
@@ -82,7 +79,7 @@ class _BloodPressureEntryPageState extends State<BloodPressureEntryPage> {
               const SizedBox(height: 48),
               Center(
                 child: Text(
-                  'Add new blood pressure',
+                  'Add new glucose',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
@@ -131,14 +128,8 @@ class _BloodPressureEntryPageState extends State<BloodPressureEntryPage> {
               const SizedBox(height: 28),
               _LabeledField(
                 label: 'Systolic Blood Pressure',
-                controller: _systolicController,
+                controller: _glucoseController,
                 placeholder: '134',
-              ),
-              const SizedBox(height: 20),
-              _LabeledField(
-                label: 'Diastolic Blood Pressure',
-                controller: _diastolicController,
-                placeholder: '70',
               ),
               const SizedBox(height: 40),
               Row(
