@@ -1,0 +1,7 @@
+{
+  "@@locale": "ko",
+  "signIn": "로그인",
+  "@signIn": {
+    "description": "로그인"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "@@locale": "vi",
+  "signIn": "Đăng nhập",
+  "@signIn": {
+    "description": "Đăng nhập"
+  }
+}
