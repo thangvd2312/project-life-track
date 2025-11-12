@@ -1,7 +1,9 @@
 import 'package:app_life_track/views/screens/auth/register.dart';
 import 'package:app_life_track/views/screens/onboarding/onboarding_flow.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -9,6 +11,41 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    void signInWithKakao() async {
+      // Login combination sample + Detailed error handling callback
+      bool talkInstalled = await isKakaoTalkInstalled();
+      // If Kakao Talk has been installed, log in with Kakao Talk. Otherwise, log in with Kakao Account.
+      if (talkInstalled) {
+        try {
+          OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
+          print('Login succeeded. ${token.accessToken}');
+        } catch (e) {
+          print('Login failed. $e');
+
+          // After installing Kakao Talk, if a user does not complete app permission and cancels Login with Kakao Talk, skip to log in with Kakao Account, considering that the user does not want to log in.
+          // You could implement other actions such as going back to the previous page.
+          if (e is PlatformException && e.code == 'CANCELED') {
+            return;
+          }
+
+          // If a user is not logged into Kakao Talk after installing Kakao Talk and allowing app permission, make the user log in with Kakao Account.
+          try {
+            OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+            print('Login succeeded. ${token.accessToken}');
+          } catch (e) {
+            print('Login failed. $e');
+          }
+        }
+      } else {
+        try {
+          OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+          print('Login succeeded. ${token.accessToken}');
+        } catch (e) {
+          print('Login failed. $e');
+        }
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -130,13 +167,7 @@ class LoginScreen extends StatelessWidget {
                     width: 22,
                     height: 22,
                   ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => const OnboardingFlow(),
-                      ),
-                    );
-                  },
+                  onPressed: signInWithKakao,
                 ),
               ],
             ),

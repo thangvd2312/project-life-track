@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:app_life_track/constants/colors.dart';
 import 'package:app_life_track/constants/shadows.dart';
 import 'package:app_life_track/constants/sizes.dart';
 import 'package:app_life_track/constants/texts.dart';
-import 'package:flutter/material.dart';
 import 'package:app_life_track/views/screens/home/widgets/accurate_progress_bar.dart';
 
 class AverageSleepInWeek extends StatelessWidget {
@@ -20,7 +20,6 @@ class AverageSleepInWeek extends StatelessWidget {
       child: Column(
         spacing: 10,
         children: [
-          // Row 1
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: ThemeSize.lg),
             child: Row(
@@ -45,7 +44,6 @@ class AverageSleepInWeek extends StatelessWidget {
             ),
           ),
 
-          // Row 2
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: ThemeSize.lg),
             child: Row(
@@ -57,7 +55,6 @@ class AverageSleepInWeek extends StatelessWidget {
             ),
           ),
 
-          // Row 3
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: ThemeSize.sm),
             child: AccurateProgressBar(),
