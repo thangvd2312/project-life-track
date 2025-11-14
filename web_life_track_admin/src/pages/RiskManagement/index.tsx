@@ -7,7 +7,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { UserDetailModal } from "@/components/modals/UserDetailModal";
 import { CreateCareCardModal } from "@/components/modals/CreateCareCardModal";
 
 // Mock risk data
@@ -339,15 +338,6 @@ export default function RiskManagementPage() {
         </table>
       </div>
 
-      {/* Modals */}
-      {selectedUser && (
-        <UserDetailModal
-          isOpen={isUserDetailOpen}
-          onClose={() => setIsUserDetailOpen(false)}
-          userName={selectedUser.name}
-          userData={selectedUser}
-        />
-      )}
       <CreateCareCardModal
         isOpen={isCreateCareOpen}
         onClose={() => {

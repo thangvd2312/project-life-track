@@ -1,3 +1,4 @@
+import 'package:app_life_track/controllers/biomarker_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -68,6 +69,16 @@ class _GlucoseEntryPageState extends State<GlucoseEntryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final BiomarkerController biomarkerController = BiomarkerController();
+    Future<void> _save() async {
+      Map<String, dynamic> body = {
+        "type": "blood_sugar",
+        "data": {"systolic": int.parse(_glucoseController.text)},
+        "measured_at": _measurementDateTime.toIso8601String(),
+      };
+      biomarkerController.save_biomarker(body: body, context: context);
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -139,7 +150,7 @@ class _GlucoseEntryPageState extends State<GlucoseEntryPage> {
                       height: 40,
                       child: FilledButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          _save();
                         },
                         style: FilledButton.styleFrom(
                           backgroundColor: const Color(0xFF0A84FF),

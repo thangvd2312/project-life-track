@@ -3,74 +3,67 @@
 export interface User {
   id: number;
   name: string;
-  groups: string[];
   riskStatus: string;
-  careStatus: string;
-  inputTypes: string[];
-  outputTypes: string[];
   lastActive: string;
+  recordDate: string;
+  address: string;
+  healthScore: string;
 }
 
 export const MOCK_USERS = [
   {
     id: 1,
     name: "홍길동",
-    groups: ["고혈압", "당뇨"],
     riskStatus: "2개 확인 필요",
-    careStatus: "1개 진행 중",
-    inputTypes: ["식단", "약물"],
-    outputTypes: ["혈압", "심박수"],
     lastActive: "2025-10-08",
+    recordDate: "2025-10-08",
+    address: "서울특별시 강남구 테헤란로 152",
+    healthScore: "",
   },
   {
     id: 2,
     name: "김영희",
-    groups: ["비만"],
     riskStatus: "정상",
-    careStatus: "2개 진행 중",
-    inputTypes: ["식단", "운동"],
-    outputTypes: ["혈당", "심박수"],
     lastActive: "2025-10-09",
+    recordDate: "2025-10-08",
+    address: "부산광역시 해운대구 센텀중앙로 45",
+    healthScore: "",
   },
   {
     id: 3,
     name: "이철수",
-    groups: ["심혈관", "고혈압"],
     riskStatus: "1개 확인 필요",
-    careStatus: "진행 중인 케어 없음",
-    inputTypes: ["약물"],
-    outputTypes: ["혈압"],
     lastActive: "2025-10-07",
+    recordDate: "2025-10-08",
+    address: "대구광역시 수성구 들안로 234",
+    healthScore: "",
   },
   {
     id: 4,
     name: "박민수",
-    groups: ["당뇨"],
     riskStatus: "3개 확인 필요",
-    careStatus: "3개 진행 중",
-    inputTypes: ["식단", "약물", "운동"],
-    outputTypes: ["혈당", "혈압", "심박수"],
     lastActive: "2025-10-09",
+    recordDate: "2025-10-08",
+    address: "인천광역시 남동구 예술로 88",
+    healthScore: "",
   },
   {
     id: 5,
     name: "정수진",
-    groups: ["고혈압"],
     riskStatus: "정상",
-    careStatus: "1개 진행 중",
-    inputTypes: ["식단"],
-    outputTypes: ["혈압"],
     lastActive: "2025-10-06",
+    recordDate: "2025-10-08",
+    address: "광주광역시 서구 상무대로 120",
+    healthScore: "",
   },
   {
     id: 6,
     name: "최동욱",
-    groups: ["비만", "당뇨"],
     riskStatus: "2개 확인 필요",
-    careStatus: "2개 진행 중",
-    inputTypes: ["식단", "운동"],
-    outputTypes: ["혈당", "심박수"],
     lastActive: "2025-10-08",
+    recordDate: "2025-10-08",
+    address: "대전광역시 유성구 대학로 59",
+    healthScore: "",
   },
 ];
 
