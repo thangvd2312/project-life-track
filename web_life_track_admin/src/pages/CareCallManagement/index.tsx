@@ -17,7 +17,6 @@ import {
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { UserDetailModal } from "@/components/modals/UserDetailModal";
 import { ScriptViewerModal } from "@/components/modals/ScriptViewerModal";
 
 interface CareCall {
@@ -281,13 +280,6 @@ export default function CareCallManagementPage() {
           </TableBody>
         </Table>
       </div>
-
-      {/* Modals */}
-      <UserDetailModal
-        isOpen={isUserModalOpen}
-        onClose={() => setIsUserModalOpen(false)}
-        userName={selectedUser || ""}
-      />
 
       <ScriptViewerModal
         isOpen={isScriptModalOpen}
