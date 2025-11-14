@@ -1,0 +1,32 @@
+## Backend Deployment Guide
+
+Follow this flow whenever backend code changes:
+
+1. **Build a new Docker image**
+   ```bash
+   cd be_life_track
+   docker buildx build --platform linux/amd64 -t <ECR_REPO>:<VERSION> .
+   ```
+
+2. **Push to ECR**
+   ```bash
+   aws ecr get-login-password --region <REGION> | \
+     docker login --username AWS --password-stdin <ACCOUNT>.dkr.ecr.<REGION>.amazonaws.com
+   docker push <ECR_REPO>:<VERSION>
+   ```
+
+3. **Update deployment manifest**
+   - Edit `be_life_track/deploy-backend.yaml`
+   - Change the `image` tag to the new `<VERSION>`
+
+4. **Apply to EKS**
+   ```bash
+   kubectl apply -f be_life_track/deploy-backend.yaml
+   ```
+
+5. **Verify rollout**
+   ```bash
+   kubectl rollout status deployment/life-track-backend
+   ```
+
+> Always bump the image tag (version) so Kubernetes pulls the new image.
