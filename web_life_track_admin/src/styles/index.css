@@ -89,6 +89,8 @@ body {
   --theme-white-600: #f0f7ff;
   --theme-black-100: #1c1c1e;
   --theme-gray-100: #8a8a8e;
+  --theme-gray-200: #999999;
+  --theme-gray-300: #e0e0e0e0;
   --shadow-theme-100: 0 4px 24px rgba(0, 0, 0, 0.06),
     0 2px 8px rgba(0, 0, 0, 0.04);
   --shadow-theme-200: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -206,6 +208,8 @@ body {
   --color-theme-white-600: var(--theme-white-600);
   --color-theme-black-100: var(--theme-black-100);
   --color-theme-gray-100: var(--theme-gray-100);
+  --color-theme-gray-200: var(--theme-gray-200);
+  --color-theme-gray-300: var(--theme-gray-300);
   --shadow-theme-100: var(--shadow-theme-100);
   --shadow-theme-200: var(--shadow-theme-200);
   --shadow-theme-300: var(--shadow-theme-300);

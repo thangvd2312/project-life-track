@@ -1,17 +1,18 @@
-import type { IRoute } from "@/common/types";
-import { LAYOUT, type LayoutValue } from "@/constants/layout";
-import { URL } from "@/constants/url";
-import { DashboardLayout, PrivateLayout } from "@/layouts";
 import { lazy, Suspense } from "react";
 import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
 } from "react-router-dom";
+import type { IRoute } from "@/common/types";
+import { LAYOUT, type LayoutValue } from "@/constants/layout";
+import { URL } from "@/constants/url";
+import { DashboardLayout, PrivateLayout } from "@/layouts";
 
 const LoginPage = lazy(() => import("@/pages/Login"));
 const DashboardPage = lazy(() => import("@/pages/Dashboard"));
 const UserManagementPage = lazy(() => import("@/pages/UserManagement"));
+const UserDetailPage = lazy(() => import("@/pages/UserDetail"));
 const RiskManagementPage = lazy(() => import("@/pages/RiskManagement"));
 const InsightPage = lazy(() => import("@/pages/Insight"));
 const CareCallManagementPage = lazy(() => import("@/pages/CareCallManagement"));
@@ -42,6 +43,10 @@ const privateRoutes: IRoute[] = [
   {
     path: URL.Users,
     element: withLayout(LAYOUT.DASHBOARD_LAYOUT, <UserManagementPage />, true),
+  },
+  {
+    path: URL.UserDetail,
+    element: withLayout(LAYOUT.DASHBOARD_LAYOUT, <UserDetailPage />, true),
   },
   {
     path: URL.Risks,

@@ -3,6 +3,7 @@ export const URL = {
   Login: "/login",
   Dashboard: "/dashboard",
   Users: "/dashboard/users",
+  UserDetail: "/dashboard/users/:userId",
   CareCardDetail: "/dashboard/care-card/:id",
   Risks: "/dashboard/risks",
   Insight: "/dashboard/insight",
