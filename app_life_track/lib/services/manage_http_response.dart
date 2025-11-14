@@ -19,6 +19,9 @@ void manageHttpResponse({
     case 500:
       showSnackBar(context, json.decode(response.body)['error']);
       break;
+    case 403:
+      showSnackBar(context, json.decode(response.body)['message']);
+      break;
     case 201:
       onSuccess();
       break;

@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:app_life_track/providers/user_provider.dart';
 import 'package:app_life_track/widgets/avatar_with_indicator.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Header extends StatelessWidget {
+class Header extends ConsumerWidget {
   const Header({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
+
+    String formatToday() {
+      final now = DateTime.now();
+      final formatter = DateFormat('EEE (dd/MM)', 'en_US');
+      return formatter.format(now);
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -14,11 +25,11 @@ class Header extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Good morning, Leo!",
+              "Good morning, ${user?.name ?? ""}!",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text(
-              "Thu (10/11)",
+              formatToday(),
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
