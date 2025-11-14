@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:app_life_track/providers/user_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AvatarWithIndicator extends StatelessWidget {
+class AvatarWithIndicator extends ConsumerWidget {
   const AvatarWithIndicator({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
+
     return Stack(
       children: [
         Container(
@@ -14,11 +18,11 @@ class AvatarWithIndicator extends StatelessWidget {
           child: Center(
             child: FittedBox(
               child: Text(
-                'JD',
+                user?.name?.substring(0, 1).toUpperCase() ?? "",
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14, // CỨ ĐỂ LỚN, FittedBox sẽ scale xuống
+                  fontSize: 14,
                 ),
               ),
             ),
