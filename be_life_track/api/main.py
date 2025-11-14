@@ -13,6 +13,7 @@ from api.middlewares.exception_handler import (
 )
 from api.routes.auth import router as auth_router
 from api.routes.health import router as health_router
+from api.routes.user import router as user_router
 from core.config import settings
 from core.logging import setup_logging
 from db.session import engine
@@ -35,6 +36,7 @@ def create_app() -> FastAPI:
 
     app.include_router(health_router)
     app.include_router(auth_router)
+    app.include_router(user_router)
 
     @app.on_event("startup")
     async def on_startup() -> None:
