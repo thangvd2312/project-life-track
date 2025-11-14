@@ -17,10 +17,39 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-def create_access_token(subject: str, expires_minutes: int | None = None) -> str:
-    expire_in = expires_minutes or settings.JWT_EXPIRATION_MINUTES
-    expire = datetime.now(tz=timezone.utc) + timedelta(minutes=expire_in)
-    to_encode: Dict[str, Any] = {"sub": subject, "exp": expire}
+def create_access_token(
+    user_id: int,
+    name: str | None = None,
+    expires_delta: timedelta | None = None,
+    expires_minutes: int | None = None,
+) -> str:
+    """
+    Create JWT access token with user_id and name
+    
+    Args:
+        user_id: User ID
+        name: User name (optional)
+        expires_delta: Token expiration time delta
+        expires_minutes: Token expiration time in minutes
+    
+    Returns:
+        Encoded JWT token
+    """
+    if expires_delta is not None:
+        expire = datetime.now(tz=timezone.utc) + expires_delta
+    else:
+        minutes = expires_minutes or settings.JWT_EXPIRATION_MINUTES or (60 * 24)
+        expire = datetime.now(tz=timezone.utc) + timedelta(minutes=minutes)
+
+    to_encode: Dict[str, Any] = {
+        "sub": str(user_id),
+        "user_id": user_id,
+        "exp": expire,
+    }
+    
+    if name:
+        to_encode["name"] = name
+    
     return jwt.encode(to_encode, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
 
 

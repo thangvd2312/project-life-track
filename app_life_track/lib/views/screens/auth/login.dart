@@ -1,9 +1,13 @@
+import 'dart:convert';
+
+import 'package:app_life_track/services/manage_http_response.dart';
 import 'package:app_life_track/views/screens/auth/register.dart';
-import 'package:app_life_track/views/screens/onboarding/onboarding_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_life_track/global_variable.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -12,39 +16,60 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    Future<void> _exchangeTokenWithBackend(OAuthToken kakaoToken) async {
+      //
+      try {
+        http.Response response = await http.post(
+          Uri.parse("$uri/login/kakao"),
+          body: jsonEncode({'accessToken': kakaoToken.accessToken}),
+          headers: {'Content-Type': 'application/json'},
+        );
+        if (!context.mounted) return;
+        manageHttpResponse(
+          response: response,
+          context: context,
+          onSuccess: () async {
+            if (!context.mounted) return;
+            showSnackBar(context, "Login successfully");
+          },
+        );
+      } catch (e) {
+        if (!context.mounted) return;
+        showSnackBar(context, '$e');
+      }
+    }
+
     void signInWithKakao() async {
-      // Login combination sample + Detailed error handling callback
       bool talkInstalled = await isKakaoTalkInstalled();
-      // If Kakao Talk has been installed, log in with Kakao Talk. Otherwise, log in with Kakao Account.
+      OAuthToken? kakaoToken;
       if (talkInstalled) {
         try {
-          OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
-          print('Login succeeded. ${token.accessToken}');
+          kakaoToken = await UserApi.instance.loginWithKakaoTalk();
+          print('Login succeeded. ${kakaoToken.accessToken}');
         } catch (e) {
           print('Login failed. $e');
-
-          // After installing Kakao Talk, if a user does not complete app permission and cancels Login with Kakao Talk, skip to log in with Kakao Account, considering that the user does not want to log in.
-          // You could implement other actions such as going back to the previous page.
           if (e is PlatformException && e.code == 'CANCELED') {
             return;
           }
-
-          // If a user is not logged into Kakao Talk after installing Kakao Talk and allowing app permission, make the user log in with Kakao Account.
           try {
-            OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-            print('Login succeeded. ${token.accessToken}');
+            kakaoToken = await UserApi.instance.loginWithKakaoAccount();
+            print('Login succeeded. ${kakaoToken.accessToken}');
           } catch (e) {
             print('Login failed. $e');
           }
         }
       } else {
         try {
-          OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-          print('Login succeeded. ${token.accessToken}');
+          kakaoToken = await UserApi.instance.loginWithKakaoAccount();
+          print('Login succeeded. ${kakaoToken.accessToken}');
         } catch (e) {
           print('Login failed. $e');
         }
       }
+
+      if (kakaoToken == null) return;
+
+      // await _exchangeTokenWithBackend(kakaoToken);
     }
 
     return Scaffold(

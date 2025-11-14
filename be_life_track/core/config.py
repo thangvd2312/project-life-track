@@ -19,12 +19,14 @@ class Settings(BaseSettings):
 
     LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
 
+    KAKAO_APP_ID: int | None = None
+
     @field_validator("DATABASE_URL")
     @classmethod
     def validate_db_url(cls, v: str) -> str:
         if not (v.startswith("mysql+asyncmy://") or v.startswith("mysql+aiomysql://")):
             raise ValueError(
-                "DATABASE_URL phải dùng async driver: mysql+asyncmy hoặc mysql+aiomysql"
+                "DATABASE_URL must use async driver: mysql+asyncmy or mysql+aiomysql"
             )
         return v
 

@@ -35,6 +35,7 @@ services:
       JWT_ALGORITHM: HS256
       JWT_EXPIRATION_MINUTES: "60"
       LOG_LEVEL: INFO
+      KAKAO_APP_ID: "1335231"
       PYTHONPATH: /app
     ports:
       - "8000:8000"
