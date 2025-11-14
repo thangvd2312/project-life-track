@@ -152,8 +152,8 @@ const sugarAndFatDetailOptions: IOptionCustomLineChart = {
 
 const cholesterolAndSodiumOptions: IOptionCustomLineChart = {
   yAxis: [
-    { min: 0, max: 300, yAxisId: "mg", },
-    { min: 0, max: 3000, yAxisId: "mg" },
+    { min: 0, max: 300, unit: "mg", },
+    { min: 0, max: 3000, unit: "mg" },
   ],
   labels: [
     {
