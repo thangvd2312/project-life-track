@@ -40,6 +40,6 @@ async def login_with_kakao(
         ).model_dump(),
     }
 
-    return success_response(data=data)
+    return success_response(data=data, message="Login successfully")
 
 

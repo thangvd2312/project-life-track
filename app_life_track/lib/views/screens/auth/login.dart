@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_life_track/controllers/auth_controller.dart';
 import 'package:app_life_track/services/manage_http_response.dart';
 import 'package:app_life_track/views/screens/auth/register.dart';
 import 'package:flutter/material.dart';
@@ -9,56 +10,28 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_life_track/global_variable.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
-    Future<void> _exchangeTokenWithBackend(OAuthToken kakaoToken) async {
-      //
+class _LoginScreenState extends State<LoginScreen> {
+  final AuthController authController = AuthController();
+
+  void signInWithKakao() async {
+    bool talkInstalled = await isKakaoTalkInstalled();
+    OAuthToken? kakaoToken;
+    if (talkInstalled) {
       try {
-        http.Response response = await http.post(
-          Uri.parse("$uri/login/kakao"),
-          body: jsonEncode({'accessToken': kakaoToken.accessToken}),
-          headers: {'Content-Type': 'application/json'},
-        );
-        if (!context.mounted) return;
-        manageHttpResponse(
-          response: response,
-          context: context,
-          onSuccess: () async {
-            if (!context.mounted) return;
-            showSnackBar(context, "Login successfully");
-          },
-        );
+        kakaoToken = await UserApi.instance.loginWithKakaoTalk();
+        print('Login succeeded. ${kakaoToken.accessToken}');
       } catch (e) {
-        if (!context.mounted) return;
-        showSnackBar(context, '$e');
-      }
-    }
-
-    void signInWithKakao() async {
-      bool talkInstalled = await isKakaoTalkInstalled();
-      OAuthToken? kakaoToken;
-      if (talkInstalled) {
-        try {
-          kakaoToken = await UserApi.instance.loginWithKakaoTalk();
-          print('Login succeeded. ${kakaoToken.accessToken}');
-        } catch (e) {
-          print('Login failed. $e');
-          if (e is PlatformException && e.code == 'CANCELED') {
-            return;
-          }
-          try {
-            kakaoToken = await UserApi.instance.loginWithKakaoAccount();
-            print('Login succeeded. ${kakaoToken.accessToken}');
-          } catch (e) {
-            print('Login failed. $e');
-          }
+        print('Login failed. $e');
+        if (e is PlatformException && e.code == 'CANCELED') {
+          return;
         }
-      } else {
         try {
           kakaoToken = await UserApi.instance.loginWithKakaoAccount();
           print('Login succeeded. ${kakaoToken.accessToken}');
@@ -66,12 +39,25 @@ class LoginScreen extends StatelessWidget {
           print('Login failed. $e');
         }
       }
-
-      if (kakaoToken == null) return;
-
-      // await _exchangeTokenWithBackend(kakaoToken);
+    } else {
+      try {
+        kakaoToken = await UserApi.instance.loginWithKakaoAccount();
+        print('Login succeeded. ${kakaoToken.accessToken}');
+      } catch (e) {
+        print('Login failed. $e');
+      }
     }
 
+    if (kakaoToken == null) return;
+    authController.loginWithKakao(
+      accessToken: kakaoToken.accessToken,
+      context: context,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

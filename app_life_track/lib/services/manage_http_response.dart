@@ -8,12 +8,13 @@ void manageHttpResponse({
   required BuildContext context,
   required VoidCallback onSuccess,
 }) {
+  print(json.decode(response.body));
   switch (response.statusCode) {
     case 200:
       onSuccess();
       break;
     case 400:
-      showSnackBar(context, json.decode(response.body)['msg']);
+      showSnackBar(context, json.decode(response.body)['message']);
       break;
     case 500:
       showSnackBar(context, json.decode(response.body)['error']);
