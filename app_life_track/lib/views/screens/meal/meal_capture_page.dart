@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
+import 'meal_analysis_page.dart';
+
 class MealCapturePage extends StatefulWidget {
   const MealCapturePage({super.key});
 
@@ -148,6 +150,14 @@ class _MealCapturePageState extends State<MealCapturePage>
   }
 
   Widget _buildCameraPreview() {
+    // If photo captured, show the image instead of camera
+    if (_lastCapture != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Image.file(File(_lastCapture!.path), fit: BoxFit.cover),
+      );
+    }
+
     if (_errorMessage != null) {
       return Center(
         child: Text(
@@ -196,14 +206,35 @@ class _MealCapturePageState extends State<MealCapturePage>
   }
 
   Widget _buildBottomRow(BuildContext context) {
+    final hasPhoto = _lastCapture != null;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        // Left: thumbnail or retake button
         SizedBox(
           width: 64,
           height: 64,
-          child: _lastCapture == null
-              ? Container(
+          child: hasPhoto
+              ? GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _lastCapture = null;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF4F4F4),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.refresh,
+                      color: Color(0xFF9FA3AB),
+                      size: 32,
+                    ),
+                  ),
+                )
+              : Container(
                   decoration: BoxDecoration(
                     color: const Color(0xFFF4F4F4),
                     borderRadius: BorderRadius.circular(12),
@@ -212,45 +243,67 @@ class _MealCapturePageState extends State<MealCapturePage>
                     Icons.image_outlined,
                     color: Color(0xFF9FA3AB),
                   ),
-                )
-              : ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.file(
-                    File(_lastCapture!.path),
-                    fit: BoxFit.cover,
+                ),
+        ),
+        const Spacer(),
+        // Center: shutter or next button
+        hasPhoto
+            ? GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MealAnalysisPage(imagePath: _lastCapture!.path),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 76,
+                  height: 76,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: const Color(0xFF0A84FF),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF0A84FF).withValues(alpha: 0.3),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(Icons.check, color: Colors.white, size: 36),
+                ),
+              )
+            : GestureDetector(
+                onTap: _capturePhoto,
+                child: Container(
+                  width: 76,
+                  height: 76,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0x1A000000),
+                        blurRadius: 12,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF7A7A7A),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
                   ),
                 ),
-        ),
-        const Spacer(),
-        GestureDetector(
-          onTap: _capturePhoto,
-          child: Container(
-            width: 76,
-            height: 76,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x1A000000),
-                  blurRadius: 12,
-                  offset: Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Center(
-              child: Container(
-                width: 48,
-                height: 48,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF7A7A7A),
-                  shape: BoxShape.circle,
-                ),
               ),
-            ),
-          ),
-        ),
         const Spacer(),
+        // Right: back button
         IconButton(
           icon: Image.asset(
             'assets/icons/icon-back.png',

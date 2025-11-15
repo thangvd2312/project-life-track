@@ -1,1 +1,1 @@
-String uri = "http://localhost:8000";
+String uri = "https://api.lifetrack.tidesquare.vn";
